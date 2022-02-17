@@ -1,8 +1,8 @@
 #include<stdio.h>
 
 struct node {
-    unsigned dist[20];
-    unsigned from[20];
+    int dist[20];
+    int from[20];
 
 }rt[10];
 
@@ -23,16 +23,24 @@ int main() {
     }
     
     do {
-        count = 0;
-        for (i = 0; i < nodes; i++)
-            for (j = 0; j < nodes; j++)
-                for (k = 0; k < nodes; k++)
+        count = 0;                          
+
+        //We are checking for all the nodes.
+        //The significance of count is that let's say if there is a negative edge which minimised the distance b/w two vertices
+        //Now all the adjacent vertices distance may or may not be changed, and thereby we check the whole matrix again 
+        //Till we reach a state where no additional change can be made to the distances
+        //And count in that case will not incremnent. 
+
+
+        for (i = 0; i < nodes; i++)         //traversal to each source node 
+            for (j = 0; j < nodes; j++)     //traversal to each destination node
+                for (k = 0; k < nodes; k++) //traversal to all intermediate nodes possible between source & destination
                     if (rt[i].dist[j] > costmat[i][k] + rt[k].dist[j]) {
                         rt[i].dist[j] = rt[i].dist[k] + rt[k].dist[j];
                         rt[i].from[j] = k;
                         count++;
-                        printf("I equals: %d J equals: %d K equals: %d\n",i,j,k);
                     }
+        printf("Count is greater than 0\n");
     } while (count != 0);
     
     for (i = 0; i < nodes; i++) {
